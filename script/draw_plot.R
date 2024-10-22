@@ -14,6 +14,7 @@ load("./RNAseq.rdata")
 
 ############火山图绘图#################
 #火山图
+pdf(file ="volcano_plot" ,width = 16, height = 12,bg = "transparent")
 volcano_plot <- ggplot(DE_result, aes(x = log2FoldChange, y = -log10(padj))) +
   geom_point(shape = 21, size = 4, aes(fill = ifelse(log2FoldChange < -1 & padj < 0.05, "down", 
                                                      ifelse(log2FoldChange > 1 & padj < 0.05, "up", "ns"))), 
@@ -26,9 +27,12 @@ volcano_plot <- ggplot(DE_result, aes(x = log2FoldChange, y = -log10(padj))) +
     values = c("down" = "blue", "up" = "red", "ns" = "gray")) +  #定义颜色
   geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "black") +  # 添加 p 值参考线
   geom_vline(xintercept = c(-1, 1), linetype = "dashed", color = "black") +  # 添加 FoldChange 阈值参考线
-  theme_classic() +  #使用经典绘图，没有背景图
+  theme_classic() +#使用经典绘图，没有背景图
+  theme(
+    panel.background = element_rect(fill = "transparent", color = NA),  # 绘图区域背景透明
+    plot.background = element_rect(fill = "transparent", color = NA),   # 整个图形背景透明
+  )
   labs(x = "Log2 Fold Change", y = "p-value",fill = 'significant')  #标题名，x轴名，y轴名
-ggsave("volcano_plot.png",plot = volcano_plot,width=1000, height=800,units = "px")
 ###########热图数据处理###################
 #三表关联,用于制作热图
 TNP <- dplyr::select(DE_result,id,log2FoldChange,pvalue,padj) %>% #选择出DE列，筛选出id，log2，pvalue，padj列
@@ -41,7 +45,7 @@ group_by(TNP,direction) %>%
 exp <-column_to_rownames(genes_TMM_EXPR,var = "id")
 exp_sub <- exp[apply(exp, 1, function(x) sum(x) >= 1 ), ]
 #指定文件名和尺寸
-png("Heatmap_expression_plot.png", width = 1200, height = 1000)
+pdf(file = "Heatmap_expression_plot.png", width = 16, height = 12,bg = "transparent")
 # 创建热图
 Heatmap_expression_plot <- Heatmap(exp_sub,
                                    border = TRUE,
@@ -57,7 +61,7 @@ dev.off()
 dat_cor <- cor(t(exp_sub), method = "pearson")
 
 #指定文件名和尺寸
-png("Heatmap_Correlation_plot.png", width = 1200, height = 1000)
+pdf("Heatmap_Correlation_plot.png", width = 16, height = 12,bg = "transparent")
 ## 相关性热图
 Heatmap_Correlation_plot <- pheatmap( dat_cor,
                                       color = colorRampPalette(c("blue","white","red"))(100),
@@ -80,7 +84,7 @@ temp <- log2(temp+0.001)
 temp_df <- as.matrix(temp)
 
 #指定文件名和尺寸
-png("Heatmap_significant_plot.png", width = 1200, height = 1000)
+pdf(file = "Heatmap_significant_plot.png", width = 16, height = 12,bg = "transparent")
 #使用 ComplexHeatmap 绘制热图
 Heatmap_significant_plot <-Heatmap(temp_df,
                                    name = "significant",    # 设置颜色条名称

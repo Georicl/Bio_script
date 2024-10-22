@@ -43,7 +43,7 @@ pca_rotated  <- PCA[["rotated"]]  #载入rotated表
 #可视化pca
 ##解释度,画图
 screeplot(PCA)
-#关闭图形设备，保存图像
+
 ##主成分差异,画图
 biplot(PCA,x = "PC1",y = "PC2",
        encircle = TRUE,encircleFill = TRUE,
