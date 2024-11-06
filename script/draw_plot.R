@@ -14,7 +14,6 @@ load("./RNAseq.rdata")
 
 ############火山图绘图#################
 #火山图
-pdf(file ="volcano_plot" ,width = 16, height = 12,bg = "transparent")
 volcano_plot <- ggplot(DE_result, aes(x = log2FoldChange, y = -log10(padj))) +
   geom_point(shape = 21, size = 4, aes(fill = ifelse(log2FoldChange < -1 & padj < 0.05, "down", 
                                                      ifelse(log2FoldChange > 1 & padj < 0.05, "up", "ns"))), 
@@ -33,6 +32,7 @@ volcano_plot <- ggplot(DE_result, aes(x = log2FoldChange, y = -log10(padj))) +
     plot.background = element_rect(fill = "transparent", color = NA),   # 整个图形背景透明
   )
   labs(x = "Log2 Fold Change", y = "p-value",fill = 'significant')  #标题名，x轴名，y轴名
+ggsave(file ="volcano_plot" ,width = 16, height = 12,bg = "transparent")
 ###########热图数据处理###################
 #三表关联,用于制作热图
 TNP <- dplyr::select(DE_result,id,log2FoldChange,pvalue,padj) %>% #选择出DE列，筛选出id，log2，pvalue，padj列
