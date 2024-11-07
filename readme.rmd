@@ -4,7 +4,10 @@ output: html_notebook
 author: 向旸
 date: 2024
 ---
-# introduction
+# RNA-seq
+RNA-seq Upstream Analysis script
+
+# draw_plot
 This script (draw_plot fold) set is to serve some data generated after the upstream analysis of the server cannot be quickly automated in the downstream at one time, so a simple script to summarize the call is also written as a python practice. There may be some other updates that will continue to be based on this framework.\
 Requirement environment: python>3.5\
 Please watch check out the help instructions：`python draw_plot.py --help`\
@@ -16,7 +19,7 @@ This script's default output path and temporary file storage path are the curren
 log named draw_plot.log, save in the current directory.\
 Xiang Yang\
 
-# 序言
+# draw_plot
 这个脚本集是为了服务于一些进行了服务器上游分析后，产生的数据无法一次性在下游快速自动化处理，因此简单写了一个总结调用的脚本，也当是写python练手。后续可能会更新一些别的根据这个框架继续更新的。\
 需求环境：python>3.5\
 查看帮助文档：`python draw_plot.py --help`\
