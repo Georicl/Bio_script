@@ -2,7 +2,9 @@ import subprocess
 import sys
 import argparse
 import os
-
+#############################
+#这是用R画图的一个脚本，可以画火山图与热图，并且可以选择安装orgDB
+#############################
 ###region 脚本建立
 #获取根目录
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -27,10 +29,10 @@ if len(sys.argv) == 1:
     draw_plot.print_help()
     sys.exit(1)  # 退出程序，返回状态码1表示错误
 #R脚本路径读取
-path_stv = os.path.join(project_root,'script','save_the_result.R')
-path_org = os.path.join(project_root,'script','make_orgDB.R')
-path_draw = os.path.join(project_root, 'script', 'draw_plot.R')
-path_pca = os.path.join(project_root, 'script','PCA.R')
+path_stv = os.path.join(project_root,'draw_plot_R','save_the_result.R')
+path_org = os.path.join(project_root,'draw_plot_R','make_orgDB.R')
+path_draw = os.path.join(project_root, 'draw_plot_R', 'draw_plot_R.R')
+path_pca = os.path.join(project_root, 'draw_plot_R','PCA.R')
 ### endregion
 ### region进行脚本处理
 #如果需要对exp表达量改名
@@ -58,6 +60,6 @@ if os.path.exists(file_delete):
 
 #产生日志
 #将输出重定向到文件 rscript_output.log
-with open('draw_plot.log', 'w') as f:
+with open('draw_plot_R.log', 'w') as f:
     sys.stdout = f  #捕获标准输出
     sys.stderr = f  #捕获错误输出
