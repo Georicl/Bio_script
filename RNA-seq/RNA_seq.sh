@@ -4,22 +4,22 @@ set -e  #error
 
 if [ "$#" -ne 6 ]; then  #检测参数数量
    echo "
-脚本使用方法
+How to use this script
 sh RNAseq_.sh <REF_genome> <gtf_file> <sample_file> <cpu> <method> <data_path> 
  
-   <REF_genome>    参考基因组文件名
-   <gtf_file>      注释文件（gtf）名
-   <sample_file>   样本信息表（如sample.txt）文件名
-   <cpu>           hisat2使用的线程数
-   <method>        差异分析所使用的软件，请输入edgeR（无生物学重复）或DESeq2（有生物学重复）
-   <data_path>     转录组数据存放路径
- 使用说明：
- ##该说明十分重要，请将该说明仔细看完## 
- 样本信息表进行如下格式要求： 第一列必须为转录组数据_1/2.clean.fq.gz的前缀，即转录组数据名。
- 1.在转录组数据中需要包含一个sample2.txt，该文件应包含如下内容：
-为两列，第一列为组类（自定义），第二列为转录组数据前缀名
- 2.转录组数据应至少包括以下文件：
-信息表文件 sample2.txt 参考基因组序列文件 参考基因注释文件 原始测序数据文件"
+   <REF_genome>    ref genome
+   <gtf_file>      gtf file name
+   <sample_file>   sample information table(sample.txt)
+   <cpu>           hisat2 threads
+   <method>        Variance analysis software， use edgeR or DESeq2
+   <data_path>     RNA-seq data path（NOT ADD "/" IN THE TAIL）
+ Instruction manual：
+ ##This is an important note, so please read it carefully##
+ The sample information table has the following format requirements：the first colunm contain RNA-seq sample's name。
+ The RNA-seq data contain sample2.txt，the file need to contain:
+ Two columns, the first column is group class (custom) and the second column is the transcriptome data prefix
+  "
+
    exit 1
 fi
 
