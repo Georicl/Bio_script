@@ -7,8 +7,6 @@ date: 2024
 # introduction
 This script (draw_plot fold) set is to serve some data generated after the upstream analysis of the server cannot be quickly automated in the downstream at one time, so a simple script to summarize the call is also written as a python practice. There may be some other updates that will continue to be based on this framework.\
 Requirement environment: python>3.5\
-Xiang Yang\
-# 2024.11.7
 Please watch check out the help instructions：`python draw_plot.py --help`\
 How to make your sample.txt?\
 You need to review to your genes.TMM.EXPR.matrix file.\
@@ -16,13 +14,11 @@ Second colunm in sample.txt must same to the genes.TMM.EXPR.matrix file's colunm
 If you need to build a orgDB package, please download annotation package by tsv format.\
 This script's default output path and temporary file storage path are the current directory.\
 log named draw_plot.log, save in the current directory.\
+Xiang Yang\
 
 # 序言
 这个脚本集是为了服务于一些进行了服务器上游分析后，产生的数据无法一次性在下游快速自动化处理，因此简单写了一个总结调用的脚本，也当是写python练手。后续可能会更新一些别的根据这个框架继续更新的。\
 需求环境：python>3.5\
-向旸
-
-# 2024.10.22
 查看帮助文档：`python draw_plot.py --help`\
 sample.txt需要先看你的genes.TMM.EXPR.matrix文件\
 第二列的名字要和上述文件的列名相同（也就是样本的名称），第一列则是组别。绝大多数原始文件的TMM.EXPR文件的样本名也是原始组名。\
@@ -30,3 +26,4 @@ sample.txt需要先看你的genes.TMM.EXPR.matrix文件\
 orgDB参数导入时，请下载tsv格式的annotation包，否则无法进行。\
 该脚本默认输出路径与临时文件存放路径为当前目录。\
 运行日志名为draw_plot.log，存放在当前目录。\
+向旸\
