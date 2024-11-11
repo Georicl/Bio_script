@@ -1,0 +1,21 @@
+---
+title: "seqtools help documentation"
+author: 向旸
+output: html_notebook
+---
+# **SEQTOOLS**
+ *Used to facilitate some text message processing work, if you encountered errors please communicate with me!*
+## introduction
+The tool is designed to be used for a variety of purposes related to sequence processing and supports the reading of logs produced by hisat2 and blast.Subsequent updates are expected on the extraction of the longest transcripts.
+## EXTRACT GENES RANDOM
+Randomized extraction sequence with seed number 10
+## SORT FASTA BY LENGTH
+Sort the sequences by length, default is from shortest to longest, you can use reverse
+## SHUFFLE
+Perform a randomized disruption of the sequence.
+## SUB SEQ
+Extract the table as provided in sample.txt
+## BY ID
+use nucle acid as reference
+## SEQUENCE STATISTICS
+Read the sequences and count the N50, total length, and GC content of the sequences to evaluate the assembly results.
