@@ -283,9 +283,9 @@ elif args.command =='ht2log':
 #import module
 ############################
 elif args.command == 'N50': #import N50
-    N50(args.gene_fasta,args.out_path)
+    N50.N50(args.gene_fasta,args.out_path)
 elif args.command == 'blast':
-    Blast_identify(args.blast_in, args.out_path, args.indentify)
+    Blast_identify.blast_identify(args.blast_in, args.out_path, args.indentify)
 elif args.command == 'get_longest':
-    get_longest(args.cds, args.out_path, args.gff)
+    get_longest.get_longest(args.cds, args.out_path, args.gff)
 #end
