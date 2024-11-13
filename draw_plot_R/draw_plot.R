@@ -18,7 +18,7 @@ volcano_plot <- ggplot(DE_result, aes(x = log2FoldChange, y = -log10(padj))) +
   geom_point(shape = 21, size = 4, aes(fill = ifelse(log2FoldChange < -1 & padj < 0.05, "down", 
                                                      ifelse(log2FoldChange > 1 & padj < 0.05, "up", "ns"))), 
              alpha = 0.8,) +  # 根据 log2FoldChange 值设置颜色，同时设定散点透明度与大小
-  geom_text_repel(data = filter(DE_result, abs(log2FoldChange) > 1 & padj < 0.05),
+  geom_text_repel(data = filter(DE_result, abs(log2FoldChange) > 3 & padj < 0.05),
                   box.padding = 0.3,
                   aes(label = id), #点名取自DE_result的id列
                   vjust = 1, hjust = 1, size = 3) +  # 控制标签位置和大小
@@ -48,6 +48,7 @@ exp_sub <- exp[apply(exp, 1, function(x) sum(x) >= 1 ), ]
 pdf(file = "Heatmap_expression_plot.png", width = 16, height = 12,bg = "transparent")
 # 创建热图
 Heatmap_expression_plot <- Heatmap(exp_sub,
+                                   
                                    border = TRUE,
                                    name = "Expression",    # 设置颜色条名称
                                    col = colorRamp2(c(-5, 0, 5), c("blue", "white", "red")), # 设置渐变色
@@ -97,8 +98,8 @@ Heatmap_significant_plot <-Heatmap(temp_df,
                                    show_column_names = TRUE , # 显示列名
                                    border = 'grey',     #边框灰色
                                    rect_gp = gpar(col = 'white',lwd =1),   #内边框白色，宽度1
-                                   row_names_gp = gpar(fontsize = 8,fontface = 'italic'), #字体
-                                   column_names_gp = gpar(fontsize = 8,fontface = 'EUC'), #字体
+                                   row_names_gp = gpar(fontsize = 9,fontface = 'italic'), #字体
+                                   column_names_gp = gpar(fontsize = 9,fontface = 'EUC'), #字体
                                    column_title_gp = gpar(fontsize = 16,fontface = 'italic'), #标题字体
                                    #聚类分组
                                    column_km = 2,

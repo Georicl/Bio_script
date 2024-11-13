@@ -12,10 +12,12 @@ temp_args <- commandArgs(trailingOnly = TRUE)
 path_temp <- temp_args[1] #导入了3.merge文件夹位置
 path_DE_result <- temp_args[2] #导入DE
 #两个可选参数，默认为FALSE
-choose_org <- temp_args[3]
-choose_exp <- temp_args[4]
+choose_exp <- temp_args[3]
 #导入改名的sample
-path_sample <- temp_args[5]
+path_sample <- temp_args[4]
+#导入改名的orgDB
+path_orgdb <- temp_args[5] 
+choose_org <- temp_args[6]
 #解析文件夹内文件
 path_sample_info <- file.path(path_temp,"genes.TPM.not_cross_norm.TMM_info.txt")
 path_gene_counts <- file.path(path_temp,"genes.counts.matrix")
@@ -74,38 +76,6 @@ if(choose_exp == 1){
 
 }
 
-##################orgDB前期处理########################
-#注意：该处理仅可以Ocu的包进行处理，同时会只提取第1、10、12、13、21列
-
-#新库的构建方式，删除了重复行
-emapper1 <- read_delim("~/Downloads/MM_j6g98g1i.emapper.annotations.tsv",    #读取原包orgDB
-                       delim = "\t", escape_double = FALSE, col_names= FALSE,
-                       comment = "#", trim_ws = TRUE)  %>%
-  dplyr::select(GID=X1,GO=X10,KO=X12,Pathway=X13,OG=,Gene_name=X21) #删除一些不必要的列
-emapper1$GID <-gsub("\\..*", "", as.character(emapper1$GID))  #删除末尾带.*的基因名
-emapper1 <- emapper1 %>%  #删除重复行
-  distinct(GID, .keep_all = TRUE) 
-#删除GO列中包含'-'的行
-empapper1 <- emapper1 %>%
-  dplyr::filter(!grepl("-", GO))
-
-
-write.table(empapper1,"~/Downloads/work/MM_xgaacda2.emapper.annotations.(1).txt",row.names = F,quote = F) #导出为处理后的库文件
-
-####################orgDB处理后数据导入#################
-
-#导入基因信息表，这个包是已经经过annotation处理的注释包
-emapper <- read_table("~/Downloads/work/MM_xgaacda2.emapper.annotations.(1).txt")
-
-#构建只含有GID和基因名的基因信息表
-gene_info <- dplyr::select(emapper, GID,Gene_name) %>%
-  dplyr::filter(!is.na(Gene_name))
-
-#构建含有GID，GO，IEA的基因信息表
-gene_GO <- dplyr::select(emapper, GID,GO)%>%
-  mutate(EVIDENCE = 'IEA') %>%
-  separate_rows(GO, sep = ',', convert = F)
-
 #####################数据处理######################
 
 #DE结果处理
@@ -130,6 +100,7 @@ DE_result <- DE_result %>%
 
 #########保存数据#########################
 #保存已经导入的数据
+#这个数据会在运行了画图plot后删除，无需变更，只是一个临时的中间文件
 save(gene_counts, gene_exp, genes_TMM_EXPR,
      sample_info,DE_result,
      file = './RNAseq.rdata')

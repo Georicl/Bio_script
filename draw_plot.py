@@ -10,7 +10,7 @@ import os
 project_root = os.path.dirname(os.path.abspath(__file__))
 #获取脚本解释器
 draw_plot = argparse.ArgumentParser(
-    description = "这个脚本用于转录组处理结果的处理，需要搭配服务里已有的RNAseq.sh使用后，将得出的结果的3.merge和4.DE_result文件进行处理，最后会导出为图片，文件位置为当前目录。"
+    description = "这个脚本用于转录组处理结果的处理，需要搭配已有的RNAseq.sh使用后，将得出的结果的3.merge和4.DE_result文件进行处理，最后会导出为PDF文件，文件位置为当前目录。"
 )
 ###endregion
 ###region 参数设定
@@ -43,10 +43,13 @@ else:
 #如果有orgDB，则触发处理orgDB的脚本
 if read_args.org:
     subprocess.run(['Rscript',path_org,read_args.org])
+    choose_org = "1"
 else:
-    subprocess.run(['Rscript',path_stv,read_args.merge,read_args.de,str(0),name_exp_sample,read_args.SAMPLE])
+    choose_org = "0"
+#运行save_the_result.R
+subprocess.run(['Rscript',path_stv,read_args.merge,read_args.de,name_exp_sample,read_args.SAMPLE,path_org,choose_org])
 #输出画图文件
-subprocess.run(['Rscript', path_draw,read_args.merge,read_args.de])
+subprocess.run(['Rscript', path_draw])
 #输出PCA聚类
 subprocess.run(['Rscript',path_pca,read_args.sample])
 ### endregion
