@@ -256,6 +256,9 @@ elif len(sys.argv) == 2 and sys.argv[1] =='N50':
 elif len(sys.argv) == 2 and sys.argv[1] =='blast':
     blast_parse.print_help()
     sys.exit(1)
+elif len(sys.argv) == 2 and sys.argv[1] =='get_longest':
+    get_longest_parse.print_help()
+    sys.exit(1)
 #endregion
 ######################################
 #parse
