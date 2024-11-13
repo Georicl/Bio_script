@@ -8,9 +8,9 @@ import os
 import sys
 from Bio import SeqIO
 from Bio.SeqRecord import SeqRecord
-
-from seqtools.Blast_identify import blast_identify
-from seqtools.N50 import N50
+import Blast_identify
+import N50
+import get_longest
 
 
 #endregion
@@ -208,6 +208,11 @@ blast_parse.add_argument('blast_in', type=str, help='Input your blast file')
 blast_parse.add_argument('out_path', type=str, help='Output path directory')
 blast_parse.add_argument('indentify', type=float, help='Filter how much recognition rate is above ,'
                                                        'The input units are %')
+
+get_longest_parse = subparsers.add_parser('get_longest',help='get longest cds sequence')
+get_longest_parse.add_argument('gene_fasta', type=str, help='Input your genome FASTA file')
+get_longest_parse.add_argument('out_path', type=str, help='Output path directory')
+get_longest_parse.add_argument('gff',type=str,help='input gff3 file')
 #endregion
 ##################################################
 #region for hisat2.log
@@ -280,5 +285,7 @@ elif args.command =='ht2log':
 elif args.command == 'N50': #import N50
     N50(args.gene_fasta,args.out_path)
 elif args.command == 'blast':
-    blast_identify(args.blast_in,args.out_path,args.indentify)
+    Blast_identify(args.blast_in, args.out_path, args.indentify)
+elif args.command == 'get_longest':
+    get_longest(args.cds, args.out_path, args.gff)
 #end

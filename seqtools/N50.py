@@ -87,3 +87,5 @@ def N50(fa_argv,out_path):
         f.write(f'N count= {n_count:<10}\n'
               f'  Gaps = {gaps:<10}\n')
     return
+
+
