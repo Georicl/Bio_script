@@ -8,7 +8,7 @@ from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 ##################################
 #open fa file used seq
-def N50(fa_argv,out_path):
+def N50(fa_argv,out_path,trinity_gene):
     ###################################
     #function for calculate N50 and total length
     ###################################
@@ -75,6 +75,19 @@ def N50(fa_argv,out_path):
     # endregion
     ##################################################
     path_fa = Path(fa_argv)
+    if trinity_gene == 1:
+        ####################
+        #if input is a trinity fasta and want to statistic
+        ####################
+        with open(fai,'r') as f:
+            numgenes = 0
+            for line in f:
+                info = line.strip().split('\t')[0]
+                pattern = r'_\d+_'
+                matchs = re.findall(pattern,info)
+                matches = re.findall(r'\d+',matchs[0])
+                if int(matches[0]) > numgenes:
+                    numgenes = int(matches[0])
     with open(out_N50_path,'w') as f:
     #write results
         f.write(f'File={path_fa.stem}\n'
@@ -82,10 +95,15 @@ def N50(fa_argv,out_path):
                 f'Mean length = {mean_n:<10}\n'
                 f'GC content = {GC_content:<10}\n')  #only print file name
         for n in ('N50','N60','N70','N80','N90','N100'): #print N50,N60,N70,N80,N90,N100
-            nx1,idx = nx_sum(chr_len.values(), n)
-            f.write(f'{n:<4} = {nx1:<10}, n = {idx:<10}\n')
-        f.write(f'N count= {n_count:<10}\n'
-              f'  Gaps = {gaps:<10}\n')
-    return
+                nx1,idx = nx_sum(chr_len.values(), n)
+                f.write(f'{n:<4} = {nx1:<10}, n = {idx:<10}\n')
+        f.write(f'N count= {n_count:<10}, Gaps = {gaps:<10}\n')
+        if trinity_gene == 1:
+            ####################
+            # if input is a trinity fasta and want to statistic
+            ####################
+            f.write(f'This is trinity gene argument:\n'
+                f'  gene = {numgenes:<10}\n')
 
+    return
 
