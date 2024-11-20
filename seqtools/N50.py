@@ -106,4 +106,3 @@ def N50(fa_argv,out_path,trinity_gene):
                 f'  gene = {numgenes:<10}\n')
 
     return
-
