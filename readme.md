@@ -2,7 +2,6 @@
 title: "Readme"
 output: html_notebook
 author: 向旸
-date: 2024
 ---
 # **seqtools**
 It integrates some functions for reading blast and hisat2 result files for screening and summarizing results, and supports extracting sequences by geneid, sequencing sequences, and randomly extracting or disrupting sequence order for comparison analysis.\
@@ -14,13 +13,13 @@ Now seqtools has eight functional modules\
 `shuffle` Break up the order of the sequence.\
 `subseq` Screening and extraction of gene sequences based on provided gene ids,need to provide a sample list,the first list must same to geneID。
 `extract`Randomly extracted sequences, seed number defaults to 10, with the option to enter your own seed (but it seems like I haven't gotten around to writing it yet)\
-`N50` This option can read the fasta input and create a fai and output N50 、total length and GC content in a sample.txt\
+`N50` This option can read the fasta input and create a fai and output N50 and total length and GC content in a sample.txt\
 `get_longest` can get the longest transcripts in cds sequence by gff3\
 
 # **draw_plot**
 This script (draw_plot fold) set is to serve some data generated after the upstream analysis of the server cannot be quickly automated in the downstream at one time, so a simple script to summarize the call is also written as a python practice. There may be some other updates that will continue to be based on this framework.\
 Requirement environment: python>3.5\
-Please watch check out the help instructions：`python draw_plot.py --help`\
+Please watch check out the help instructions：`python /seqtools/draw_plot.py --help`\
 How to make your sample.txt?\
 You need to review to your genes.TMM.EXPR.matrix file.\
 Second colunm in sample.txt must same to the genes.TMM.EXPR.matrix file's colunm (I think the file's colunm name should be same to your sample's name), The first colunm is the group's name.\
@@ -52,7 +51,7 @@ Georicl@outlook.com\
 整合了一些用于阅读blast和hisat2的结果文件用于筛选和结果汇总的功能，并支持按geneid提取序列，为序列排序，随机提取或打乱序列顺序用于比对分析等功能。\
 需求环境：python>3.5\
 该工具依赖于Bio模块和pysam模块需要下载\
-查看帮助文档：`python seqtools.py `\
+查看帮助文档：`python /seqtools/seqtools.py `\
 目前seqtools有八个功能模块\
 `sort` 对核苷酸序列的长度进行排序，默认参数为最短到最长，但--reverse选项将反转结果。\
 `shuffle` 打乱序列顺序。\
