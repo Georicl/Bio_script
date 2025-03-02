@@ -13,7 +13,7 @@ def get_longest(cds,out_path,gff):
     cdsseq = SeqIO.index(cds,'fasta')
     gffdb = gffutils.create_db(gff,'gff.db',force=True,merge_strategy='create_unique')
     gene_to_longestcds = {}
-    out = os.path.jion(out_path,'longest_cds.fasta')
+    out = os.path.join(out_path,'longest_cds.fasta')
     for g in gffdb.all_features(featuretype='gene'):
         g_id = g.id
         for m in gffdb.children(g,featuretype='mRNA'):
