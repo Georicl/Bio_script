@@ -279,7 +279,7 @@ main: {
         ## more than one sample 
         
         if ($cross_sample_norm =~ /^TMM$/i) {
-            my $cmd = "$FindBin::RealBin/support_scripts/run_TMM_scale_matrix.pl --matrix $TPM_matrix_file > $out_prefix.$cross_sample_norm.EXPR.matrix";
+            my $cmd = "$FindBin::RealBin/run_TMM_scale_matrix.pl --matrix $TPM_matrix_file > $out_prefix.$cross_sample_norm.EXPR.matrix";
             &process_cmd($cmd);
         }
         elsif ($cross_sample_norm =~ /^UpperQuartile$/) {

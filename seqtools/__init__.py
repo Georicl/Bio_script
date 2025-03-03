@@ -1,19 +1,28 @@
 # seqtools/__init__.py
-import os
-import importlib
 
-__all__ = []
-__path__ = [os.path.dirname(__file__)]
+# 显式导入所有子模块的函数
+from .cli import seq_sort
+from .cli import seq_shuffle
+from .cli import seq_extract
+from .cli import seq_bed_mapping
+from .cli import subseq
+from .cli import seq_search, read_seq
+from .N50 import N50
+from .Blast_identify import blast_identify
+from .get_longest import get_longest
+from .RNA_seq import RNA_seq
 
-# 新增：排除工具脚本列表
-ignore_files = ("_", "draw_plot", "cli")  # 新增"cli"过滤
-
-for module_file in os.listdir(__path__[0]):
-    if module_file.endswith(".py") and not module_file.startswith(ignore_files):
-        module_name = module_file[:-3]
-        module = importlib.import_module(f".{module_name}", package=__name__)
-
-        for item in dir(module):
-            if not item.startswith("_"):
-                globals()[item] = getattr(module, item)
-                __all__.append(item)
+# 声明所有公共接口
+__all__ = [
+    'seq_sort',
+    'seq_shuffle',
+    'seq_extract',
+    'seq_bed_mapping',
+    'subseq',
+    'seq_search',
+    'read_seq',
+    'RNA_seq',
+    'N50',
+    'blast_identify',
+    'get_longest'
+]
