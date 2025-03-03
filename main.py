@@ -120,10 +120,10 @@ def setup_commands():
 
     @registry.register("RNAseq", "转录组数据上游处理")
     def _(parser):
-        parser.add_argument('gene_fasta', help="输入参考基因组文件路径")
+        parser.add_argument('gene_fasta', help="输入参考基因组文件路径(以~/开头或绝对路径)")
         parser.add_argument('out_path', help="输出目录,该命令会在该目录下生成5个工作文件夹分别为ref，01-05")
-        parser.add_argument('gtf_path', help="输入参考基因组gtf文件路径")
-        parser.add_argument('sample_path', help="输入样本信息表，第一列为样本名（例如XYSM1_1.clean.fq.gz,样本名则为XYSM1，即_1/2...前的所有字符）")
+        parser.add_argument('gtf_path', help="输入参考基因组gtf文件路径(以~/开头或绝对路径)")
+        parser.add_argument('sample_path', help="输入样本信息表(以~/开头或绝对路径)，第一列为样本名（例如XYSM1_1.clean.fq.gz,样本名则为XYSM1，即_1/2...前的所有字符）")
         parser.add_argument('cpu', help="线程数")
         parser.add_argument('method', help="使用的定量方法，无生物学重复输入edgeR，有生物学重复输入DEseq2")
         parser.add_argument('data_path', help="输入转录组文件路径（末尾不带/）")

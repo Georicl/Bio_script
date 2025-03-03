@@ -80,7 +80,7 @@ fi
 cd $work/1.mapping
 bam_count=$(ls *.bam 2>/dev/null | wc -l)
 if [ $sample_count -ne $bam_count ]; then
-awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c 'samtools sort -o {}.bam {}.sam'
+awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c "samtools sort -@ $CPU -o {}.bam {}.sam"
 
 fi
 
@@ -88,8 +88,7 @@ fi
 cd $work/1.mapping
 bai_count=$(ls *.bai 2>/dev/null | wc -l)
 if [ $sample_count -ne $bai_count ]; then
-awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c 'samtools index {}.bam'
-
+awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c "samtools index {}.bam "
 fi
 
 #5.表达定量
