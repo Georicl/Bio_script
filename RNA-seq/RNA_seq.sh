@@ -18,6 +18,7 @@ sh RNAseq_.sh <REF_genome> <gtf_file> <sample_file> <cpu> <method> <data_path>
  The sample information table has the following format requirements：the first colunm contain RNA-seq sample's name。
  The RNA-seq data contain sample2.txt，the file need to contain:
  Two columns, the first column is group class (custom) and the second column is the transcriptome data prefix
+ path : ~/script must have abundance_estimates_to_matrix.pl and run_DE_analysis.pl
   "
 
    exit 1
