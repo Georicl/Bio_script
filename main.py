@@ -120,29 +120,32 @@ def setup_commands():
 
     @registry.register("RNAseq", "转录组数据上游处理")
     def _(parser):
-        # 设置主描述
-        parser.description = (
-            """处理RNA-seq数据分析完整流程，包含以下步骤：
-        1. 参考基因组索引构建
-        2. 原始数据质控(FASTQC)
-        3. 序列比对(配置支持HISAT2/STAR)
-        4. 表达量定量(featureCounts/Salmon)
-        5. 差异表达分析(DESeq2/edgeR)
-        """
-        )
+        # 使用 RawTextHelpFormatter 保留格式
+        parser.formatter_class = argparse.RawTextHelpFormatter
 
-        # 添加补充说明到help内容
-        parser.epilog = (
-            "【文件准备要求】\n"
-            "1. 样本信息表(sample_path)格式示例:\n"
-            "1st样本名\t2st（可无）（不需要输入该列）\n"
-            "sample1\tsample1_2.clean.fq.gz\n"
-            "sample1\tsample1_2.clean.fq.gz\n"
-            "2. 在转录组数据目录下需要放置一个名字为sample2.txt文件，内容为：\n"
-            "第一列为组名（自定义）\t第二列为样本名:\n "
-            "group1\tsample1\n"
-            "gourp1\tsample2\n"
-        )
+        # 主描述（带格式的步骤说明）
+        parser.description = """\
+        处理RNA-seq数据分析完整流程，主要步骤包含：
+        1. 参考基因组索引构建
+        2. 序列比对（HISAT2）
+        3. 表达量定量（featureCounts）
+        4. 差异表达分析（DESeq2/edgeR）"""
+
+        # 补充说明（带格式的文件示例）
+        parser.epilog = """\
+        【文件准备要求】
+
+        > 样本信息表 (sample_path 参数文件):
+        1st列: 样本名        （示例） | 2st列: 文件名 [可选]
+        ------------------------------|-------------------------
+        sample1               | sample1_1.clean.fq.gz
+        sample1               | sample1_2.clean.fq.gz
+
+        > 必须准备的 sample2.txt 文件:
+        第一列: 组名          | 第二列: 样本名
+        ------------------------------|-------------------------
+        control               | sample1
+        treatment             | sample2"""
 
         parser.add_argument('gene_fasta', help="输入参考基因组文件路径(以~/开头或绝对路径)")
         parser.add_argument('out_path', help="输出目录,该命令会在该目录下生成5个工作文件夹分别为ref，01-05")
