@@ -18,6 +18,7 @@ class CommandRegistry:
 
     def __init__(self):
         self.handlers = {}
+        self.parsers = {}
         self.root_parser = argparse.ArgumentParser(
             prog="bio_tools",
             description="生物信息学多功能处理工具",
@@ -36,6 +37,7 @@ class CommandRegistry:
             parser = self.subparsers.add_parser(name, help=help_str)
             handler = config_func(parser)  # 配置参数并获取处理函数
             self.handlers[name] = handler
+            self.parsers[name] = parser
             return handler
 
         return decorator
@@ -176,8 +178,12 @@ def main():
 
     try:
         # 空参数时显示帮助
-        if len(sys.argv) == 1 or len(sys.argv) == 2:
+        if len(sys.argv) == 1 :
             registry.root_parser.print_help()
+            return
+
+        if len(sys.argv) == 2 and sys.argv [1] in registry.parsers:
+            registry.parsers[sys.argv[1]].print_help()  # 打印子命令帮助信息
             return
 
         # 参数解析与执行
