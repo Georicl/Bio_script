@@ -1,6 +1,5 @@
 ---
 title: "Readme"
-output: html_notebook
 author: 向旸
 ---
 # **seqtools**
