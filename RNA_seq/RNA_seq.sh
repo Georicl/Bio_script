@@ -94,7 +94,7 @@ fi
 #5.表达定量
 cd $work/2.Quantification
 if [ ! -f *.count ]; then
-         awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c "$script/run-featurecounts.R -b $work/1.mapping/{}.bam -g $GTF_FILE -o {} " > run_feature.sh
+         awk '{print $1}' $SAMPLE_FILE | xargs -I {} sh -c "$script/run-featurecounts.R -b $work/1.mapping/{}.bam -g $GTF_FILE -o {} 1>{}.log 2>&1 " > run_feature.sh
 	 sh run_feature.sh
 fi
 
