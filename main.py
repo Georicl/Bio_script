@@ -176,7 +176,7 @@ def main():
 
     try:
         # 空参数时显示帮助
-        if len(sys.argv) == 1 | len(sys.argv) == 2:
+        if len(sys.argv) == 1 or len(sys.argv) == 2:
             registry.root_parser.print_help()
             return
 
