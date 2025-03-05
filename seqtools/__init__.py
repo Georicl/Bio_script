@@ -11,9 +11,7 @@ from .N50 import N50
 from .Blast_identify import blast_identify
 from .get_longest import get_longest
 from .RNA_seq import RNA_seq
-from .draw_plot import draw_plot
-from .draw_plot import go_plot
-from .draw_plot import run_plot
+
 
 # 声明所有公共接口
 __all__ = [

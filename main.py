@@ -163,31 +163,31 @@ def setup_commands():
             args.out_path,
         )
 
-    @registry.register("plot", "简易绘图")
-    def _(parser):
-        parser.formatter_class = argparse.RawTextHelpFormatter
-        parser.description = """\
-                简易画图流程： 示例 main.py plot -R go/heatmap 参数
-                如果是使用heatmap需要准备：
-                genes.counts.matrix
-                genes.TPM.not_cross_norm.TMM_info.txt
-                *.DE_results
-                genes.TMM.EXPR.matrix
-                如果是使用go需要准备go富集或KEGG富集的通路excel表格：
-                *.xlxs
-                输出将直接输出为pdf，输出在output参数下选择的路径
-                """
-
-        parser.add_argument("-R", "--Rs",Required=True,type= str, help="选择进行何类画图,请选择输入go或heatmap，go画图可以输出go或kegg富集，heatmap输出热图和火山图")
-        parser.add_argument("-s", "--sample", help="sample样本，如果是go请输入富集分析后得到的excel表格，如果是heatmap请输出genes.TPM.not_cross_norm.TMM_info.txt")
-        parser.add_argument("-c", "--count", help="Heatmap选项：输入计数文件genes.counts.matrix")
-        parser.add_argument("-e", "--expression", help="Heatmap选项：输入表达矩阵genes.TMM.EXPR.matrix")
-        parser.add_argument("-d", "--deresult", help="Heatmap选项：*.DE_results")
-        parser.add_argument("-m", "--map", default=None, help="Heatmap选项：对照的样本")
-        parser.add_argument("-o", "--output", Required=True, help="输出文件路径")
-        return lambda args: seqtools.run_plot(
-           args.R, args.s, args.count, args.expression, args.deresult, args.map, args.output
-        )
+    # @registry.register("plot", "简易绘图")
+    # def _(parser):
+    #     parser.formatter_class = argparse.RawTextHelpFormatter
+    #     parser.description = """\
+    #             简易画图流程： 示例 main.py plot -R go/heatmap 参数
+    #             如果是使用heatmap需要准备：
+    #             genes.counts.matrix
+    #             genes.TPM.not_cross_norm.TMM_info.txt
+    #             *.DE_results
+    #             genes.TMM.EXPR.matrix
+    #             如果是使用go需要准备go富集或KEGG富集的通路excel表格：
+    #             *.xlxs
+    #             输出将直接输出为pdf，输出在output参数下选择的路径
+    #             """
+    #
+    #     parser.add_argument("-R", "--Rs",type= str, help="选择进行何类画图,请选择输入go或heatmap，go画图可以输出go或kegg富集，heatmap输出热图和火山图")
+    #     parser.add_argument("-s", "--sample", help="sample样本，如果是go请输入富集分析后得到的excel表格，如果是heatmap请输出genes.TPM.not_cross_norm.TMM_info.txt")
+    #     parser.add_argument("-c", "--count", help="Heatmap选项：输入计数文件genes.counts.matrix")
+    #     parser.add_argument("-e", "--expression", help="Heatmap选项：输入表达矩阵genes.TMM.EXPR.matrix")
+    #     parser.add_argument("-d", "--deresult", help="Heatmap选项：*.DE_results")
+    #     parser.add_argument("-m", "--map", default=None, help="Heatmap选项：对照的样本")
+    #     parser.add_argument("-o", "--output", help="输出文件路径")
+    #     return lambda args: seqtools.run_plot(
+    #        args.R, args.s, args.count, args.expression, args.deresult, args.map, args.output
+    #     )
 
 
     return registry
