@@ -1,91 +1,101 @@
-#!/bin/python
+#!/usr/bin/env python3
 import os
 import time
 import hashlib
+import logging
 from urllib.parse import urljoin
 import requests
+from concurrent.futures import ThreadPoolExecutor
 
-BaseUrl = "https://ftp.ncbi.nlm.nih.gov/blast/db/"
-FileNamePattern = "nt_prok.{0:2d}.tar.gz"
-MD5NamePattern = "nt_prok.{0:2d}.tar.gz.md5"
-OutputDir = "./"
-MaxRetry = 1 # 重试次数
+# 配置参数
+BASE_URL = "https://ftp.ncbi.nlm.nih.gov/blast/db/"
+FILE_NAME_PATTERN = "nt_prok.{}.tar.gz"
+MD5_NAME_PATTERN = "nt_prok.{}.tar.gz.md5"
+OUTPUT_DIR = "./"
+MAX_RETRY = 3
+CHUNK_SIZE = 8192  # 下载缓存块大小
+THREADS = 5  # 并发下载数
 
+# 初始化日志
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def Dowloadfile(Url, OutPutFile):
-    "下载器"
-    # 验证文件大小
-    if os.path.exists(OutPutFile):
-        CurrentSize = os.path.getsize(OutPutFile)
+def download_file(url, output_file):
+    """下载器"""
+    if os.path.exists(output_file):
+        current_size = os.path.getsize(output_file)
     else:
-        CurrentSize = 0
+        current_size = 0
 
     with requests.Session() as session:
-        for attempt in range(MaxRetry):
+        for attempt in range(MAX_RETRY):
             try:
-                response = session.get(Url, timeout=30)
-                if response.status_code == 416:
-                    return True
+                headers = {"Range": f"bytes={current_size}-"} if current_size else {}
+                response = session.get(url, headers=headers, timeout=30, stream=True)
                 response.raise_for_status()
 
-                # 检查文件大小
-                Mode = "ab" if CurrentSize else "wb"
-
-                with open(OutPutFile, Mode) as f:
-                    # 每8MB写入一次块
-                    for chunk in response.iter_content(chunk_size=8192):
+                mode = "ab" if current_size else "wb"
+                with open(output_file, mode) as f:
+                    for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
                         if chunk:
                             f.write(chunk)
                 return True
             except requests.exceptions.RequestException as e:
-                print(f"Downloading happen an error in {OutPutFile}, retry ({attempt + 1}/{MaxRetry})")
-                time.sleep(30) # 30s重试一次
+                logging.error(f"Error downloading {output_file}: {e}, retry ({attempt + 1}/{MAX_RETRY})")
+                time.sleep(30)  # 30秒后重试
         return False
 
-def IdentifyMD5(FilePath, Md5Path):
-    """Md5 校验器"""
-    if not os.path.exists(Md5Path):
+def identify_md5(file_path, md5_path):
+    """MD5 校验器"""
+    if not os.path.exists(md5_path):
+        logging.warning(f"MD5 file not found: {md5_path}")
         return False
 
-    with open(Md5Path, "r") as f:
-        StdMD5 = f.read().strip().split()[0]
+    with open(md5_path, "r") as f:
+        std_md5 = f.read().strip().split()[0]
 
-    MD5Hash = hashlib.md5()
-    with open(FilePath, "rb") as f:
+    md5_hash = hashlib.md5()
+    with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
-            MD5Hash.update(chunk)
+            md5_hash.update(chunk)
 
-    FileMD5 = MD5Hash.hexdigest()
-    return StdMD5 == FileMD5
+    file_md5 = md5_hash.hexdigest()
+    return std_md5 == file_md5
 
 def main():
-    # 检验输出目录
-    os.makedirs(OutputDir, exist_ok=True)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # 获取文件列表
-    FileList = [FileNamePattern.format(i) for i in range(0, 25)]
-    MD5List = [MD5NamePattern.format(i) for i in range(0, 25)]
+    file_list = [FILE_NAME_PATTERN.format(i) for i in range(25)]
+    md5_list = [MD5_NAME_PATTERN.format(i) for i in range(25)]
 
-    # 下载文件
-    for File, MD5 in zip(FileList, MD5List):
-        FileUrl = urljoin(BaseUrl, File)
-        MD5Url = urljoin(BaseUrl, MD5)
-        FilePath = os.path.join(OutputDir, File)
-        MD5Path = os.path.join(OutputDir, MD5)
+    fail_files = []
 
-        if IdentifyMD5(FilePath, MD5Path):
-            continue
+    with ThreadPoolExecutor(max_workers=THREADS) as executor:
+        futures = []
+        for file, md5 in zip(file_list, md5_list):
+            file_url = urljoin(BASE_URL, file)
+            md5_url = urljoin(BASE_URL, md5)
+            file_path = os.path.join(OUTPUT_DIR, file)
+            md5_path = os.path.join(OUTPUT_DIR, md5)
 
-        Dowloadfile(FileUrl, FilePath)
-        Dowloadfile(MD5Url, MD5Path)
+            futures.append(executor.submit(download_file, md5_url, md5_path))
+            futures.append(executor.submit(download_file, file_url, file_path))
 
-    FailFile = []
-    for File, MD5 in zip(FileList, MD5List):
-        FilePath = os.path.join(OutputDir, File)
-        MD5Path = os.path.join(OutputDir, MD5)
+        # 等待所有任务完成
+        for future in futures:
+            future.result()
 
-        if not IdentifyMD5(FilePath, MD5Path):
-            FailFile.append(File)
+    # 校验文件
+    for file, md5 in zip(file_list, md5_list):
+        file_path = os.path.join(OUTPUT_DIR, file)
+        md5_path = os.path.join(OUTPUT_DIR, md5)
+
+        if not identify_md5(file_path, md5_path):
+            fail_files.append(file)
+
+    if fail_files:
+        logging.error(f"Failed to verify the following files: {fail_files}")
+    else:
+        logging.info("All files downloaded and verified successfully.")
 
 if __name__ == "__main__":
     main()
