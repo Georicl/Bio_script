@@ -13,7 +13,7 @@ FILE_NAME_PATTERN = "nt_prok.{}.tar.gz"
 MD5_NAME_PATTERN = "nt_prok.{}.tar.gz.md5"
 OUTPUT_DIR = "./"
 MAX_RETRY = 3
-CHUNK_SIZE = 8192  # 下载缓存块大小
+CHUNK_SIZE = 81920  # 下载缓存块大小，每80M写入一次文件，也就是下载成功的数据
 THREADS = 5  # 并发下载数
 
 # 初始化日志
