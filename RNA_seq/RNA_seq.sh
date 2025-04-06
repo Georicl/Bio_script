@@ -107,4 +107,4 @@ fi
 
 # 7.差异分析
 cd $work/4.DE_analysis
-perl /ME4012_Vol0002/bio_soft/public/miniconda3/bin/run_DE_analysis.pl --matrix $work/3.Merge_result/genes.counts.matrix --method $METHOD --samples_file $DATA/sample2.txt
+perl $script/run_DE_analysis.pl --matrix $work/3.Merge_result/genes.counts.matrix --method $METHOD --samples_file $DATA/sample2.txt
