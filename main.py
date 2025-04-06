@@ -7,6 +7,7 @@ BIO-SeqTools: 生物信息学序列处理工具包
 import argparse
 import sys
 from pathlib import Path
+from pkg_resources import require
 from CQ_tools import man
 from CQ_mapping import align
 import seqtools
