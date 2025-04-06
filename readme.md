@@ -2,12 +2,20 @@
 title: "Readme"
 author: 向旸
 ---
+# **CQtools**
+该整合重测序比对后进行染色体商（CQ）计算流程，包含cqmapping比对流程和cqtools主计算流程\
+主要依赖软件：\
+samtools\
+bedtools\
+bwa\
+更多帮助请寻求：`python main.py cqtools -h`\
+
 # **seqtools**
 It integrates some functions for reading blast and hisat2 result files for screening and summarizing results, and supports extracting sequences by geneid, sequencing sequences, and randomly extracting or disrupting sequence order for comparison analysis.\
 Requirement environment: python>3.5\
 The tool relies on the Bio module and pysam module need to download\
 For linux software dependencies: Blast、samtools. \
-How to check out the help instructions:`python seqtools.py `\
+How to check out the help instructions:`python main.py `\
 Now seqtools has seven functional modules\
 `sort` Sorting the length of nucleotide sequences，the default parameters are shortest to longest,but --reverse option will reverses the result.\
 `shuffle` Break up the order of the sequence.\
