@@ -7,7 +7,6 @@ BIO-SeqTools: 生物信息学序列处理工具包
 import argparse
 import sys
 from pathlib import Path
-from pkg_resources import require
 from CQ_tools import man
 from CQ_mapping import align
 import seqtools
@@ -190,9 +189,9 @@ def setup_commands():
         如果发生了意外的BUG，请在issue上提问，或直接发邮件至此处：Georicl@outlook.com
         If meet a bug when you run cqmapping, please ask in issue or email me:Georicl@outlook.com
         """
-        parser.add_argument("--fasta", require=True, help="参考基因组输入路径")
-        parser.add_argument("--pair1", require=True, help="双端测序文件1输入路径")
-        parser.add_argument("--pair2", require=True, help="双端测序文件2输入路径")
+        parser.add_argument("--fasta", required=True, help="参考基因组输入路径")
+        parser.add_argument("--pair1", required=True, help="双端测序文件1输入路径")
+        parser.add_argument("--pair2", required=True, help="双端测序文件2输入路径")
         parser.add_argument("-t", "--threads", default=4, type=int, help="使用bwa进行比对的线程数量，默认为4")
         parser.add_argument("-o", "--output", required=True, help="输出路径目录")
         return lambda args: align.run_bwa_samtools(
@@ -206,29 +205,28 @@ def setup_commands():
         parser.formatter_class = argparse.RawTextHelpFormatter
 
         parser.description = """
-                本程序用于进行CQ的比对。
-                作者：向旸
+        本程序用于进行CQ的比对。
+        作者：向旸
 
-                主要步骤包含：
+        主要步骤包含：
 
-                1. 比对 <- bedtools
-                2. 计算CQ
-                3. 筛选
-                如果使用cqmapping进行计算的情况下，可以使用如下参数进行计算：
-                --f_bam Female/output.sort.bam
-                --m_bam Male/output.sort.bam
-                其他参数自行设置。
-                最终结果文件为：F_M_CQ.filter.tsv
-                
-                如果发生了意外的BUG，请在issue上提问，或直接发邮件至此处：Georicl@outlook.com
-                If meet a bug when you run cqmapping, please ask in issue or email me:Georicl@outlook.com
+        1. 比对 <- bedtools
+        2. 计算CQ
+        3. 筛选
+        如果使用cqmapping进行计算的情况下，可以使用如下参数进行计算：
+        --f_bam Female/output.sort.bam
+        --m_bam Male/output.sort.bam
+        其他参数自行设置。
+                        
+        如果发生了意外的BUG，请在issue上提问，或直接发邮件至此处：Georicl@outlook.com
+        If meet a bug when you run cqmapping, please ask in issue or email me:Georicl@outlook.com
                 """
         parser.add_argument("--f_bam", required=True, help="输入Female比对文件")
         parser.add_argument("--m_bam", required=True, help="输入Male比对文件")
         parser.add_argument("--fasta", required=True, help="输入参考基因组文件")
         parser.add_argument("--output", required=True, help="输出路径目录")
         parser.add_argument("--cq_value", type=float, default=0.3, help="CQ比对筛选阈值，默认为0.3，筛选范围为0-1")
-        parser.add_argument("--parallel", type=int,choice=[1, 2], default=2, help="是否启用多进程进行bedtools覆盖度计算，选择值为1、2。默认值为2（启用），1为不启用")
+        parser.add_argument("--parallel", type=int, choices=[1, 2], default=2, help="是否启用多进程进行bedtools覆盖度计算，选择值为1、2。默认值为2（启用），1为不启用")
         parser.add_argument("--reads_threshold", type=int, default=30, help="reads的支持数量，默认为30")
         return lambda args: man.main(
             f_bam=args.f_bam, m_bam=args.m_bam, fasta_path_get=args.fasta,
