@@ -3,7 +3,7 @@ import os
 import requests
 import configparser
 import hashlib
-from concurrent.futures import ThreadPoolExecutor, as_completed  # 新增并发模块
+from concurrent.futures import ThreadPoolExecutor, as_completed  # 并发模块
 
 class DownLoader:
     """
