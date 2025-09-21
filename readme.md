@@ -1,7 +1,7 @@
----
-title: "Readme"
-author: 向旸
----
+# Bio Script
+Yang \
+These scripts were written when I was conducting research.
+
 # **CQtools**
 该整合重测序比对后进行染色体商（CQ）计算流程，包含cqmapping比对流程和cqtools主计算流程\
 主要依赖软件：\
