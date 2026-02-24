@@ -41,7 +41,7 @@ class CoverageCalculate:
     def _run_full_coverage(self, bam_input, output_path):
         """运行 bedtools coverage 对原始窗口文件计算覆盖度，并直接写入最终路径"""
         cmd = (
-            f"bedtools coverage -a {self.paths['windows_tsv']} -b {bam_input} -sorted "
+            f"bedtools coverage -a {self.paths['windows_tsv']} -b {bam_input} -g {self.paths['chromosome_length']} -sorted "
             f"> {output_path}"
         )
         try:
