@@ -1,0 +1,23 @@
+[project]
+name = "bioscript"
+version = "0.1.0"
+description = "An integrated pipeline for bioinformatics sequence processing, RNA-seq analysis, and CQ sex-linked marker identification."
+authors = [
+    { name = "Xiang Yang", email = "Georicl@outlook.com" }
+]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "biopython>=1.86",
+    "openpyxl>=3.1.5",
+    "pandas>=3.0.1",
+    "pysam>=0.23.3",
+]
+
+[project.scripts]
+bio-tools = "main:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]

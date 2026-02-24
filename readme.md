@@ -1,44 +1,133 @@
-# Bio Script
-Yang \
-These scripts were written when I was conducting research.
+# BioScript: Integrated Bioinformatics Toolbox
 
-# **CQtools**
-该整合重测序比对后进行染色体商（CQ）计算流程，包含cqmapping比对流程和cqtools主计算流程\
-主要依赖软件：\
-samtools\
-bedtools\
-bwa\
-更多帮助请寻求：`python main.py cqtools -h`\
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Bioinformatics](https://img.shields.io/badge/field-Bioinformatics-orange.svg)](https://en.wikipedia.org/wiki/Bioinformatics)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# **seqtools**
-It integrates some functions for reading blast and hisat2 result files for screening and summarizing results, and supports extracting sequences by geneid, sequencing sequences, and randomly extracting or disrupting sequence order for comparison analysis.\
-Requirement environment: python>3.5\
-The tool relies on the Bio module and pysam module need to download\
-For linux software dependencies: Blast、samtools. \
-How to check out the help instructions:`python main.py `\
-Now seqtools has seven functional modules\
-`sort` Sorting the length of nucleotide sequences，the default parameters are shortest to longest,but --reverse option will reverses the result.\
-`shuffle` Break up the order of the sequence.\
-`blast` filter blast identify results. \
-`extract`Randomly extracted sequences, seed number defaults to 10, with the option to enter your own seed (but it seems like I haven't gotten around to writing it yet)\
-`n50` This option can read the fasta input and create a fai and output N50 and total length and GC content in a sample.txt\
-`longest` can get the longest transcripts in cds sequence by gff3\
-`RNAseq` can perform RNAseq analysis\
+**BioScript** (also known as `bio_tools`) is a comprehensive toolkit designed for bioinformatics analysis, focusing on sequence manipulation, RNA-seq pipelines, and sex-linked marker identification (CQ analysis). It integrates industry-standard tools into a streamlined CLI interface.
 
+---
 
-# **seqtools**
-整合了一些用于阅读blast和hisat2的结果文件用于筛选和结果汇总的功能，并支持按geneid提取序列，为序列排序，随机提取或打乱序列顺序用于比对分析等功能。\
-需求环境：python>3.5\
-该工具依赖于Bio模块和pysam模块需要下载。\
-对于linux 软件的依赖： Blast、samtools。 \
-对于R包的依赖：limma、 edgeR、 DEseq2... \
-查看帮助文档：`python main.py -h `\
-目前seqtools有七个功能模块\
-`sort` 对核苷酸序列的长度进行排序，默认参数为最短到最长，但--reverse选项将反转结果。\
-`shuffle` 打乱序列顺序。\
-`blast` 筛选blast比对率结果。\
-`extract` 随机提取序列，种子数默认为10，但可以通过选项输入自己的种子（但我还没来得及写）。\
-`N50` 此选项可以读取fasta输入并创建fai文件，输出N50、总长度和GC含量。\
-`longest` 可以根据gff3文件获取cds序列的最长转录本。\
-`RNAseq` 可以进行转录组分析的标准流程。 \
+## 🌟 Key Features
 
+### 1. Sequence Tools (`seqtools`)
+- **Quality Assessment**: Calculate N50/L50 for genome assemblies (supports Trinity format).
+- **Manipulation**: Sort sequences by length, shuffle FASTA files, and random sequence extraction.
+- **Transcriptomics**: Extract the longest transcript/CDS from GFF3 and FASTA files.
+- **Filtering**: Identify and filter BLAST results based on identity thresholds.
+
+### 2. RNA-Seq Pipeline
+- Full upstream to downstream workflow:
+  1. HISAT2 indexing and alignment.
+  2. `featureCounts` for quantification.
+  3. Differential Expression (DE) analysis using **DESeq2** (with biological replicates) or **edgeR** (without replicates).
+- Automated matrix generation and TMM normalization.
+
+### 3. Sex-Linked Marker Analysis (CQ Tools)
+- **`cqmapping`**: High-throughput BWA-based alignment optimized for Sex-linked Coverage Quotient (CQ) analysis.
+- **`cqtools`**: Calculate CQ values by comparing female and male coverage to identify sex-specific genomic regions or scaffolds.
+
+---
+
+## 🛠 Prerequisites & Installation
+
+### Software Dependencies
+- **Bio-alignment**: `bwa`, `hisat2`, `samtools`, `bedtools`, `blast+`
+- **R Environment**: `limma`, `edgeR`, `DESeq2`, `featureCounts` (subread package)
+
+### Setup with `uv` (Recommended)
+This project uses [uv](https://docs.astral.sh/uv/) for modern Python package management.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/YourUsername/bioscript.git
+cd bioscript
+
+# 2. Sync dependencies and create virtual environment automatically
+uv sync
+
+# 3. Use the CLI tool directly
+uv run bio-tools --help
+```
+
+### Traditional Setup
+```bash
+pip install .
+bio-tools --help
+```
+
+---
+
+## 📖 Usage Guide
+
+BioScript uses a sub-command structure: `python main.py <command> [options]`
+
+### Sequence Manipulation
+```bash
+# Calculate N50 and GC content
+python main.py n50 input.fasta output_dir/
+
+# Extract longest CDS per gene using GFF3
+python main.py longest cds.fasta output_dir/ annotation.gff3
+
+# Sort sequences (shortest to longest, use -r for reverse)
+python main.py sort input.fasta output_dir/ -r
+```
+
+### RNA-Seq Workflow
+The pipeline automates indexing, mapping, and DE analysis.
+```bash
+python main.py RNAseq \
+    --gene_fasta ref.fa \
+    --gtf_path ref.gtf \
+    --sample_path samples.txt \
+    --cpu 16 \
+    --method DESeq2 \
+    --data_path ./raw_data \
+    --out_path ./results
+```
+
+### CQ Analysis Workflow
+Used for identifying sex-linked scaffolds.
+```bash
+# Step 1: Alignment for both sexes (Female and Male)
+python main.py cqmapping --fasta ref.fa --pair1 F_1.fq --pair2 F_2.fq -o Female/
+python main.py cqmapping --fasta ref.fa --pair1 M_1.fq --pair2 M_2.fq -o Male/
+
+# Step 2: Calculate CQ Values
+python main.py cqtools \
+    --f_bam Female/output.sort.bam \
+    --m_bam Male/output.sort.bam \
+    --fasta ref.fa \
+    --output ./cq_results \
+    --cq_value 0.3
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+bioscript/
+├── main.py                # Command-line entry point
+├── CQ_mapping/            # BWA alignment wrappers
+├── CQ_tools/              # Coverage and CQ calculation logic
+├── RNA_seq/               # Shell & Support scripts (R, Perl)
+│   ├── RNA_seq.sh         # Main pipeline script
+│   └── support_script/    # Quantification & DE analysis
+└── seqtools/              # FASTA/GFF/BLAST processing modules
+```
+
+---
+
+## ✉️ Contact & Support
+
+- **Author**: Xiang Yang (向旸)
+- **Email**: [Georicl@outlook.com](mailto:Georicl@outlook.com)
+- **Issues**: Please report bugs via the [GitHub Issues](https://github.com/YourUsername/bioscript/issues) page.
+
+---
+
+### Citation
+If you use BioScript in your research, please cite this repository:
+> Xiang, Y. (2026). BioScript: An integrated pipeline for pangenome and transcriptomic analysis. GitHub: https://github.com/YourUsername/bioscript
