@@ -5,6 +5,7 @@ description = "An integrated pipeline for bioinformatics sequence processing, RN
 authors = [
     { name = "Xiang Yang", email = "Georicl@outlook.com" }
 ]
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
